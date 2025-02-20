@@ -1,0 +1,27 @@
+
+{
+
+"Path":{
+
+    "DATA_DIR": "/media/bmw/datasets/imagenet-1k/val",
+    "MODEL_DIR": "/media/bmw/shabari/aimet/artifacts/resnet50.pth"
+},
+
+"Dataloader":{
+
+    "batch_size": 32,
+    "num_of_classes": 1000,
+    "images_per_class": 5
+},
+
+"Device":{
+
+    "device": "cuda"
+},
+
+"Quantization": {
+    "weight_bits": 8,
+    "activation_bits": 8
+}
+
+}
