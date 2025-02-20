@@ -20,7 +20,7 @@ def parse_json(json_path:str)->dict:
         def flatten(data, parent_key=''):
             if isinstance(data, dict):
                 for k, v in data.items():
-                    new_key = f"{parent_key}.{k}" if parent_key else k
+                    new_key = f"{k}" if k else parent_key
                     flatten(v, new_key)
             elif isinstance(data, list):
                 for i, v in enumerate(data):

@@ -2,42 +2,55 @@ from logger import logger
 from parse_json import parse_json
 import os
 import torch
-from pathlib import Path
-from data_pipeline import DataPipeline
 from quantize import Quantize
+import argparse
+from custom_dataset import CustomLoader
+
+
+
+from torchvision.models import resnet50
 
 
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Quantization of Pytorch Models')
+    parser.add_argument('-c','--config', type=str, help='Path to the config file', default='/media/bmw/shabari/aimet/config/config.json')
+    args = parser.parse_args()
+    return args
 
 def main():
-    json_path = os.path.join(Path("/media/bmw/shabari/aimet/config/config.json"))
-    parsed_data = parse_json(json_path)
+    args = parse_args()
     
-    logger.info(f"Parsed Data : {parsed_data}")
+    json_path = os.path.join(args.config)
     
-    data_pipeline = DataPipeline(parsed_data['Path.DATA_DIR'],parsed_data['Path.MODEL_DIR'],
-                                 parsed_data['Dataloader.batch_size'],
-                                 parsed_data['Dataloader.num_of_classes'],
-                                 parsed_data['Dataloader.images_per_class'])
+    params= parse_json(json_path)
     
-    model=Quantize.load_model(data_pipeline.model_path)
+    logger.info(f"Parameters: {params}")
     
-    model.eval()
-    
-    DataPipeline.evaluate(model.to(device),data_params=parsed_data)
-    
-    quant=Quantize(model,parsed_data['Quantization.activation_bits'],parsed_data['Quantization.weight_bits'])
-    input_tensor=torch.randn(1,3,224,224)
-    model=Quantize.prepare_model(model)
-    
-    Quantize.validate_model(model,input_tensor)
+    model=resnet50()
+    model.load_state_dict(torch.load(params['MODEL_DIR']))
     
     
-    logger.warn(f"Parsed Data: {parsed_data}")
-    sim_model = Quantize.quantize_model(model,parsed_data,input_tensor)
+    dataloader= CustomLoader(params)
     
-    DataPipeline.evaluate(sim_model.model,data_params=parsed_data)
+    
+    model=Quantize(model,params)
+    
+    model.prepare_model()
+    
+    model.validate_model()
+    
+    logger.info("Model Evaluation for Base Line Model")
+    
+    model.evaluate_model(model.model, dataloader,"Base Line Model")
+    
+    model.quantize_model(dataloader)
+
+    quant_model=model.get_quantized_model()
+    
+    model.evaluate_model(quant_model, dataloader,"Quantized Model")
+
     
     
 if __name__ == '__main__':

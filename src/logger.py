@@ -19,7 +19,7 @@ def setup_logging(log_directory='log'):
         backupCount=3
     )
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s-%(lineno)d-%(funcName)s-%(pathname)s')
 
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

@@ -1,2 +1,5 @@
 resnet50.pth
 resnet50.onnx
+__pycache__
+log
+artifacts

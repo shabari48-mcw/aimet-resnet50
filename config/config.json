@@ -9,9 +9,10 @@
 
 "Dataloader":{
 
-    "batch_size": 32,
-    "num_of_classes": 1000,
-    "images_per_class": 5
+    "batch_size": 8,
+    "num_classes": 100,
+    "images_per_class":4,
+    "input_shape": [3, 224, 224]
 },
 
 "Device":{
@@ -21,7 +22,9 @@
 
 "Quantization": {
     "weight_bits": 8,
-    "activation_bits": 8
+    "activation_bits": 8,
+    "per_channel_quantization": false,
+    "calibration_size":200 
 }
 
 }
