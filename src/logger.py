@@ -9,9 +9,8 @@ def setup_logging(log_directory='log'):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     
-    # Remove all handlers associated with the logger
-    for handler in logger.handlers[:]:
-        logger.removeHandler(handler)
+    logger.handlers.clear()
+    logger.propagate = False
 
     file_handler = RotatingFileHandler(
         os.path.join(log_directory, 'app.log'),

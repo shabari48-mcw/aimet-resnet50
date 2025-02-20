@@ -24,7 +24,7 @@
     "weight_bits": 8,
     "activation_bits": 8,
     "per_channel_quantization": false,
-    "calibration_size":200 
+    "calibration_size":500 
 }
 
 }

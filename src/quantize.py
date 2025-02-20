@@ -72,7 +72,8 @@ class Quantize():
         
         
         calibration_size = data_loader.params['calibration_size']
-        logger.info("Calibration Size: ",calibration_size)
+    
+        logger.info(f"Calibration Size: {calibration_size}")
         batch_cntr = 0
         
         batch_size = data_loader.batch_size
@@ -200,6 +201,6 @@ class Quantize():
             f.write(f"---------Model Type: {model_type}-----------\n")
             f.write(f"Top-1 Accuracy: {top1_accuracy:.2f}%\n")
             f.write(f"Top-5 Accuracy: {top5_accuracy:.2f}%\n")
-            f.write(f"Total Samples Evaluated: {total_samples}\n")
+            f.write(f"Total Samples Evaluated: {total_samples}\n\n")
             
         
